@@ -50,13 +50,23 @@ export default {
       saveBtnDisabled: false // 保存按钮是否禁用,
     }
   },
+  created(){
+    if (this.$route.params&&this.$route.params.id){
+      const id = this.$route.params.id
+      this.getTeacherById(id)
+    }
+  },
   methods: {
-    saveOrUpdate() {
+    saveOrUpdate() {//保存或者更新数据
       this.saveBtnDisabled = true
-      this.saveData()
+      if (this.teacher.id){
+        this.updateTeacher()
+      }else {
+        this.saveData()
+      }
     },
 
-    // 保存
+    // 保存讲师
     saveData() {
       teacher.save(this.teacher)
       .then(response=>{
@@ -66,6 +76,28 @@ export default {
         });
       }).then(response=>{
         this.$router.push({path:'/teacher/list'})
+      })
+    },
+    getTeacherById(id){//获取讲师
+      teacher.getById(id)
+        .then(response=>{
+            this.teacher=response.data.item
+        }).catch(error => {
+        this.$message({
+          type: 'error',
+          message: '获取数据失败'
+        })
+      })
+    },
+    updateTeacher(){
+      teacher.updateById(this.teacher)
+        .then(response=>{
+          this.$message({
+            type: 'success',
+            message: '更新数据成功'
+          })
+        }).then(response=>{
+          this.$router.push({path:'/teacher/list'})
       })
     }
 

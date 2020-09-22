@@ -39,6 +39,19 @@ export default {
       url: `/admin/edu/teacher/remove/${id}`,
       method: 'delete'
     })
+  },
+  getById(id){
+    return request({
+      url: `/admin/edu/teacher/get/${id}`,
+      method: 'get'
+    })
+  },
+  updateById(teacher){
+    return request({
+      url: `/admin/edu/teacher/update`,
+      method: 'put',
+      data:teacher
+    })
   }
 }
 
