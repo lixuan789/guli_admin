@@ -36,6 +36,9 @@
 <script>
 
 import teacher from '@/api/teacher'
+import ImageCropper from '@/components/ImageCropper'//导入上传图像所需要的组件
+import PanThumb from '@/components/PanThumb'
+
 export default {
   data(){
     return {
@@ -51,12 +54,23 @@ export default {
     }
   },
   created(){
-    if (this.$route.params&&this.$route.params.id){
-      const id = this.$route.params.id
-      this.getTeacherById(id)
+    this.init()
+  },
+  watch:{
+    $route(to,from){//监听路由的变化
+      this.init()
     }
   },
   methods: {
+    init(){
+      //判断跳转过来的路径中有没有id
+      if (this.$route.params&&this.$route.params.id){//有id则进行查找，回显数据、修改
+        const id=this.$route.params.id
+        this.getTeacherById(id)
+      }else {//没有则进行保存
+        this.teacher={}//清空表单
+      }
+    },
     saveOrUpdate() {//保存或者更新数据
       this.saveBtnDisabled = true
       if (this.teacher.id){
