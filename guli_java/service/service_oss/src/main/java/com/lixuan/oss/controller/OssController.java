@@ -26,6 +26,7 @@ public class OssController {
         //获取上传文件  MultipartFile
         //返回上传到oss的路径
         String url = ossService.uploadFile(file);
+        System.out.println(url);
         return Result.ok().data("url",url);
     }
 }

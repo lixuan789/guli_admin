@@ -5,7 +5,7 @@
         <el-input v-model="teacher.name"/>
       </el-form-item>
       <el-form-item label="讲师排序">
-        <el-input-number v-model="teacher.sort" controls-position="right" min="0"/>
+        <el-input-number v-model="teacher.sort" controls-position="right" :min="0"/>
       </el-form-item>
       <el-form-item label="讲师头衔">
         <el-select v-model="teacher.level" clearable placeholder="请选择">
@@ -25,6 +25,32 @@
       </el-form-item>
 
       <!-- 讲师头像：TODO -->
+      <!-- 讲师头像 -->
+      <el-form-item label="讲师头像">
+
+        <!-- 头衔缩略图 -->
+        <pan-thumb :image="teacher.avatar"/>
+        <!-- 文件上传按钮 -->
+        <el-button type="primary" icon="el-icon-upload" @click="imagecropperShow=true">更换头像
+        </el-button>
+
+        <!--
+    v-show：是否显示上传组件
+    :key：类似于id，如果一个页面多个图片上传控件，可以做区分
+    :url：后台上传的url地址
+    @close：关闭上传组件
+    @crop-upload-success：上传成功后的回调 -->
+        <image-cropper
+          v-show="imagecropperShow"
+          :width="300"
+          :height="300"
+          :key="imagecropperKey"
+          url="/api/oss/upload"
+          field="file"
+          @close="close"
+          @crop-upload-success="cropSuccess"/>
+
+      </el-form-item>
 
       <el-form-item>
         <el-button :disabled="saveBtnDisabled" type="primary" @click="saveOrUpdate()">保存</el-button>
@@ -40,6 +66,7 @@ import ImageCropper from '@/components/ImageCropper'//导入上传图像所需�
 import PanThumb from '@/components/PanThumb'
 
 export default {
+  components: { ImageCropper, PanThumb },
   data(){
     return {
       teacher: {
@@ -48,9 +75,12 @@ export default {
         level: 1,
         career: '',
         intro: '',
-        avatar: ''
+        avatar:''
       },
-      saveBtnDisabled: false // 保存按钮是否禁用,
+      // BASE_API:process.env.VUE_APP_BASE_API,
+      saveBtnDisabled: false, // 保存按钮是否禁用,
+      imagecropperShow: false,
+      imagecropperKey: 0
     }
   },
   created(){
@@ -69,6 +99,7 @@ export default {
         this.getTeacherById(id)
       }else {//没有则进行保存
         this.teacher={}//清空表单
+        this.teacher.avatar='https://wpimg.wallstcn.com/577965b9-bb9e-4e02-9f0c-095b41417191'
       }
     },
     saveOrUpdate() {//保存或者更新数据
@@ -113,6 +144,16 @@ export default {
         }).then(response=>{
           this.$router.push({path:'/teacher/list'})
       })
+    },
+    cropSuccess(resData) {
+      this.imagecropperShow = false
+      this.imagecropperKey = this.imagecropperKey + 1
+      console.log(resData)
+      this.teacher.avatar = resData.url
+    },
+    close() {
+      this.imagecropperShow = false
+      this.imagecropperKey=this.imagecropperKey+1
     }
 
   }
@@ -120,5 +161,9 @@ export default {
 </script>
 
 <style scoped>
-
+.avatar{
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+}
 </style>

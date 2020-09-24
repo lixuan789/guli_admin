@@ -41,6 +41,7 @@ public class OssServiceImpl implements OssService {
             InputStream inputStream = file.getInputStream();
             //获取文件名称
             String fileName = file.getOriginalFilename();
+            System.out.println(fileName);
 
             //1 在文件名称里面添加随机唯一的值
             String uuid = UUID.randomUUID().toString().replaceAll("-","");

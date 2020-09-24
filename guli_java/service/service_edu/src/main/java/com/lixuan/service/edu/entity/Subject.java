@@ -1,5 +1,6 @@
 package com.lixuan.service.edu.entity;
 
+import com.alibaba.excel.annotation.ExcelProperty;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.lixuan.service.base.model.BaseEntity;
