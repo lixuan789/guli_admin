@@ -2,6 +2,8 @@ package com.lixuan.service.edu.mapper;
 
 import com.lixuan.service.edu.entity.CourseDescription;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.lixuan.service.edu.entity.vo.CoursePublishVo;
+import org.springframework.stereotype.Repository;
 
 /**
  * <p>
@@ -11,6 +13,8 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  * @author lixuan
  * @since 2020-09-14
  */
+@Repository
 public interface CourseDescriptionMapper extends BaseMapper<CourseDescription> {
 
+    CoursePublishVo getPublishInfo(String courseId);
 }

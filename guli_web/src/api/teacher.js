@@ -52,6 +52,12 @@ export default {
       method: 'put',
       data:teacher
     })
+  },
+  list(){
+    return request({
+      url: `/admin/edu/teacher/list`,
+      method: 'get'
+    })
   }
 }
 

@@ -16,14 +16,14 @@
           :auto-upload="false"
           :on-success="fileUploadSuccess"
           :on-error="fileUploadError"
-          :disabled="importBtnDisabled"
           :limit="1"
-          action="/admin/edu/subject/addSubject"
+          :action="BASE_API+'/admin/edu/subject/addSubject'"
           name="file"
           accept="application/vnd.ms-excel">
           <el-button slot="trigger" size="small" type="primary">选取文件</el-button>
           <el-button
             :loading="loading"
+            :disabled="importBtnDisabled"
             style="margin-left: 10px;"
             size="small"
             type="success"
@@ -39,18 +39,18 @@
     name: 'import',
     data() {
       return{
-        downLoadUrl:'',
+        downLoadUrl:'https://lixuan-file.oss-cn-beijing.aliyuncs.com/excel/01.xlsx',
         importBtnDisabled:false,
         fileUploadBtnText: '上传到服务器', // 按钮文字
-        loading:false
-
+        loading:false,
+        BASE_API:process.env.VUE_APP_BASE_API
       }
     },
     created(){
 
     },
     methods: {
-      fileUploadSuccess(){//上传成功的方法
+      fileUploadSuccess(response){//上传成功的方法
         if (response.success === true) {
           this.fileUploadBtnText = '导入成功'
           this.loading = false

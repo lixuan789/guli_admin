@@ -1,15 +1,16 @@
-package com.lixuan.service.edu.controller;
+package com.lixuan.service.edu.controller.admin;
 
 
 import com.lixuan.common.base.result.Result;
+import com.lixuan.service.edu.entity.Subject;
+import com.lixuan.service.edu.entity.subject.OneSubject;
 import com.lixuan.service.edu.service.SubjectService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
-import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 /**
  * <p>
@@ -37,6 +38,18 @@ public class SubjectController {
         subjectService.saveSubject(file,subjectService);
         return Result.ok();
     }
+
+    /**
+     * 放回树形菜单
+     * @return
+     */
+    @GetMapping("list")
+    public Result getAllSubject(){
+//        List<OneSubject> list=subjectService.getAllSubject();//使用两个实体类实现
+        List<Subject> list=subjectService.getAllSubject1();//优化：使用递归实现
+        return Result.ok().data("list",list);
+    }
+
 
 }
 

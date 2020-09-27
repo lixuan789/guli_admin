@@ -1,4 +1,4 @@
-package com.lixuan.service.edu.entity;
+package com.lixuan.service.edu.entity.excel;
 
 import lombok.Data;
 

@@ -4,9 +4,8 @@ import com.alibaba.excel.context.AnalysisContext;
 import com.alibaba.excel.event.AnalysisEventListener;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
-import com.lixuan.common.base.util.ExceptionUtil;
 import com.lixuan.service.edu.entity.Subject;
-import com.lixuan.service.edu.entity.SubjectData;
+import com.lixuan.service.edu.entity.excel.SubjectData;
 import com.lixuan.service.edu.service.SubjectService;
 
 public class SubjectLisener extends AnalysisEventListener<SubjectData> {
