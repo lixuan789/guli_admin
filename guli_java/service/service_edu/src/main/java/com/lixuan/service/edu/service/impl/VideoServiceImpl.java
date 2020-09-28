@@ -1,5 +1,7 @@
 package com.lixuan.service.edu.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.lixuan.service.edu.entity.Video;
 import com.lixuan.service.edu.mapper.VideoMapper;
 import com.lixuan.service.edu.service.VideoService;
@@ -47,5 +49,12 @@ public class VideoServiceImpl extends ServiceImpl<VideoMapper, Video> implements
     @Override
     public void deleteVideo(String id) {
         videoMapper.deleteById(id);
+    }
+
+    @Override
+    public void deleteByCourseId(String courseId) {
+        QueryWrapper<Video> query = Wrappers.<Video>query();
+        query.eq("course_id",courseId);
+        videoMapper.delete(query);
     }
 }

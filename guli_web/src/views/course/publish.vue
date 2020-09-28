@@ -29,6 +29,8 @@
 
 <script>
 import course from '@/api/course'
+import teacher from '@/api/teacher'
+
 export default {
   name: 'publish',
   data() {
@@ -36,7 +38,7 @@ export default {
       saveBtnDisabled: false, // 保存按钮是否禁用
       courseId:'',
       coursePublish:{
-        cover:'',
+        cover:'https://lixuan-file.oss-cn-beijing.aliyuncs.com/avatar/cover.jpg',
         title:'',
         lessonNum:0,
         subjectLevelOne:'',
@@ -57,8 +59,9 @@ export default {
 
   methods: {
     getPublichInfo(){
-      course.getCourseInfo(this.courseId)
+      course.getPublishInfo(this.courseId)
       .then(response=>{
+        console.log(response)
         this.coursePublish=response.data.coursePublishVo
       })
     },
@@ -68,8 +71,21 @@ export default {
     },
 
     publish() {
-      console.log('publish')
-      this.$router.push({ path: '/course/list' })
+      this.$confirm('是否发布课程?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        course.publishCourse(this.courseId)
+        .then(response=>{
+          console.log('publish')
+          this.$message({
+            type: 'success',
+            message: '发布课程成功!'
+          });
+          this.$router.push({ path: '/course/list' })
+        })
+      })
     }
   }
 }

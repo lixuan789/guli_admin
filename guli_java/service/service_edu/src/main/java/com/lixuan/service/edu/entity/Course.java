@@ -1,6 +1,8 @@
 package com.lixuan.service.edu.entity;
 
 import java.math.BigDecimal;
+
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.lixuan.service.base.model.BaseEntity;
@@ -60,6 +62,12 @@ public class Course extends BaseEntity {
 
     @ApiModelProperty(value = "课程状态 Draft未发布  Normal已发布")
     private String status;
+
+    @TableField(exist = false)
+    public static final String Draft="Draft";
+
+    @TableField(exist = false)
+    public static final String Normal="Normal";
 
 
 }

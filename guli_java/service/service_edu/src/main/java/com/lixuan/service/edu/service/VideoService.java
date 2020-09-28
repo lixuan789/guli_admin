@@ -24,4 +24,6 @@ public interface VideoService extends IService<Video> {
     void updateVideo(Video video);
 
     void deleteVideo(String id);
+
+    void deleteByCourseId(String courseId);
 }
