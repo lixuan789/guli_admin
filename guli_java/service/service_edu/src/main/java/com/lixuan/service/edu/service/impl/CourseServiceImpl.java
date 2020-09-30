@@ -3,6 +3,7 @@ package com.lixuan.service.edu.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.lixuan.service.edu.client.OssClient;
 import com.lixuan.service.edu.entity.Course;
 import com.lixuan.service.edu.entity.CourseDescription;
 import com.lixuan.service.edu.entity.vo.CourseInfoVo;
@@ -40,6 +41,10 @@ public class CourseServiceImpl extends ServiceImpl<CourseMapper, Course> impleme
 
     @Autowired
     private ChapterService chapterService;
+
+    @Autowired
+    private OssClient ossClient;
+
     /**
      * 添加课程的基本信息
      * @param courseInfoVo
@@ -128,6 +133,14 @@ public class CourseServiceImpl extends ServiceImpl<CourseMapper, Course> impleme
         videoService.deleteByCourseId(courseId);//删除所有视频
         chapterService.deleteByCourseId(courseId);//删除所有章节
         courseDescriptionMapper.deleteById(courseId);//删除对应的简介
+
+        //删除课程封面
+        Course course = baseMapper.selectById(courseId);
+        String filename = course.getCover();
+        System.out.println("filename:"+filename);
+
+        ossClient.deleteOssFile(filename);
+
         baseMapper.deleteById(courseId);//删除课程
     }
 }

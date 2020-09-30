@@ -4,10 +4,14 @@ import com.aliyun.oss.OSS;
 import com.aliyun.oss.OSSClient;
 import com.aliyun.oss.OSSClientBuilder;
 import com.lixuan.oss.utils.ConstantPropertiesUtils;
+import org.bouncycastle.util.Strings;
 import org.junit.Test;
+import org.junit.platform.commons.util.StringUtils;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
+
+import java.util.Collections;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -48,5 +52,20 @@ public class OSSTest {
 
         // 关闭OSSClient。
         ossClient.shutdown();
+    }
+
+    @Test
+    public void test2(){
+        String filename="https://lixuan-file.oss-cn-beijing.aliyuncs.com/2020/09/25/3482fe240e6f46b08afb577ae859137bcover.jpg";
+        String[] split = filename.split("/")[1].split("/");
+        String a="";
+        for (int i=2;i<split.length;i++){
+            if (i!=split.length-1){
+                a=a+split[i]+"/";
+            }else {
+                a=a+split[i];
+            }
+        }
+        System.out.println(a);
     }
 }

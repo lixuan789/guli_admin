@@ -9,4 +9,6 @@ public interface OssService {
      * @return
      */
     String uploadFile(MultipartFile file);
+
+    void deteleFile(String filename);
 }

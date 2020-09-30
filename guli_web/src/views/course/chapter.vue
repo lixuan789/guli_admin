@@ -76,9 +76,29 @@
             <el-radio :label="false">默认</el-radio>
           </el-radio-group>
         </el-form-item>
+
         <el-form-item label="上传视频">
-          <!-- TODO -->
+          <el-upload
+            :on-success="handleVodUploadSuccess"
+            :on-remove="handleVodRemove"
+            :before-remove="beforeVodRemove"
+            :on-exceed="handleUploadExceed"
+            :file-list="fileList"
+            :action="BASE_API+'/api/vod/video/upload'"
+            :limit="1"
+            class="upload-demo">
+            <el-button size="small" type="primary">上传视频</el-button>
+            <el-tooltip placement="right-end">
+              <div slot="content">最大支持1G，<br>
+                支持3GP、ASF、AVI、DAT、DV、FLV、F4V、<br>
+                GIF、M2T、M4V、MJ2、MJPEG、MKV、MOV、MP4、<br>
+                MPE、MPG、MPEG、MTS、OGG、QT、RM、RMVB、<br>
+                SWF、TS、VOB、WMV、WEBM 等视频格式上传</div>
+              <i class="el-icon-question"/>
+            </el-tooltip>
+          </el-upload>
         </el-form-item>
+
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogVideoFormVisible = false">取 消</el-button>
@@ -97,6 +117,7 @@ export default {
   name: 'chapter',
   data() {
     return {
+      BASE_API:process.env.VUE_APP_BASE_API,
       saveBtnDisabled: false, // 保存按钮是否禁用
       chapterList:[],
       dialogChapterFormVisible:false,//章节弹框
@@ -111,8 +132,11 @@ export default {
         id:'',
         title:'',
         sort:0,
-        free:true
-      }
+        free:true,
+        videoSourceId:'',
+        videoOriginalName:''
+      },
+      fileList:[]
     }
   },
 
@@ -125,6 +149,27 @@ export default {
   },
 
   methods: {
+    handleVodUploadSuccess(response, file, fileList){//视频上传成功
+      this.video.videoSourceId=response.data.videoId
+      this.video.videoOriginalName=file.name
+    },
+    handleVodRemove(file, fileList){//文件列表移除文件
+      video.deleteAliyunVideo(this.video.videoSourceId)
+      .then(response=>{
+        this.$message({
+          type: 'success',
+          message: '删除成功!'
+        });
+        this.video.videoSourceId=''
+        this.video.videoOriginalName=''
+      })
+    },
+    beforeVodRemove(file, fileList){//删除文件之前
+      return this.$confirm(`确定移除 ${ file.name }？`)
+    },
+    handleUploadExceed(files, fileList){//文件超出个数限制
+      this.$message.warning(`当前限制选择 1 个文件，本次选择了 ${files.length} 个文件，共选择了 ${files.length + fileList.length} 个文件`);
+    },
     deleteChapter(id){
       this.$confirm('此操作将永久删除该章节, 是否继续?', '提示', {
         confirmButtonText: '确定',
@@ -183,9 +228,9 @@ export default {
       this.chapter.sort=0
     },
     dialogVideo(chapterId){
+      this.fileList=[]
       this.dialogVideoFormVisible=true
       this.video={}
-      this.video.free=true
       this.video.sort=0
       this.video.chapterId=chapterId //把chapterId赋值给video
     },

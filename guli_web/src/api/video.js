@@ -31,6 +31,13 @@ export default {
       url: `/admin/edu/video/deleteVideo/${id}`,//使用模板字符串进行拼接
       method: 'delete'
     })
+  },
+  //删除视频
+  deleteAliyunVideo(videoId){
+    return request({
+      url: `/api/vod/video/deleteVideo/${videoId}`,//使用模板字符串进行拼接
+      method: 'delete'
+    })
   }
 }
 

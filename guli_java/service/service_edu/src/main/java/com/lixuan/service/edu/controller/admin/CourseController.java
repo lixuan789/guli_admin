@@ -111,7 +111,7 @@ public class CourseController {
     }
 
     /**
-     * 删除课程:视频、章节、课程、简介一起删除
+     * 删除课程:视频、章节、课程、简介和小节中对应的视频一起删除
      * @param courseId
      * @return
      */

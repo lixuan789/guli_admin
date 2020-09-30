@@ -75,4 +75,25 @@ public class OssServiceImpl implements OssService {
             return null;
         }
     }
+
+    @Override
+    public void deteleFile(String filename) {
+        String endpoint = ConstantPropertiesUtils.END_POIND;
+        String accessKeyId = ConstantPropertiesUtils.ACCESS_KEY_ID;
+        String accessKeySecret = ConstantPropertiesUtils.ACCESS_KEY_SECRET;
+        String bucketName = ConstantPropertiesUtils.BUCKET_NAME;
+        OSS client = new OSSClientBuilder().build(endpoint, accessKeyId, accessKeySecret);
+        System.out.println(filename);
+        String[] split = filename.split("/");
+        String a="";
+        for (int i=3;i<split.length;i++){
+            if (i!=split.length-1){
+                a=a+split[i]+"/";
+            }else {
+                a=a+split[i];
+            }
+        }
+        client.deleteObject(bucketName,a);
+        client.shutdown();
+    }
 }

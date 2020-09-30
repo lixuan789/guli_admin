@@ -5,10 +5,7 @@ import com.lixuan.common.base.result.Result;
 import com.lixuan.oss.service.OssService;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 @Api("OSS模块")
@@ -28,5 +25,11 @@ public class OssController {
         String url = ossService.uploadFile(file);
         System.out.println(url);
         return Result.ok().data("url",url);
+    }
+
+    @DeleteMapping("detele")
+    public Result deleteOssFile(String filename){
+        ossService.deteleFile(filename);
+        return Result.ok();
     }
 }

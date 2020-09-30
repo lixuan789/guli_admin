@@ -3,13 +3,19 @@ package com.lixuan.vod.service.impl;
 import com.aliyun.vod.upload.impl.UploadVideoImpl;
 import com.aliyun.vod.upload.req.UploadStreamRequest;
 import com.aliyun.vod.upload.resp.UploadStreamResponse;
+import com.aliyuncs.DefaultAcsClient;
+import com.aliyuncs.exceptions.ClientException;
+import com.aliyuncs.vod.model.v20170321.DeleteVideoRequest;
 import com.lixuan.vod.service.VideoService;
 import com.lixuan.vod.utils.ConstantPropertiesUtil;
+import com.lixuan.vod.utils.VodUtil;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.List;
 
 @Service
 public class VideoServiceImpl implements VideoService {
@@ -38,5 +44,35 @@ public class VideoServiceImpl implements VideoService {
             e.printStackTrace();
         }
         return null;
+    }
+
+    @Override
+    public void deleteVideo(String videoId) {
+        String accessKeyId= ConstantPropertiesUtil.ACCESS_KEY_ID;
+        String accessKeySecret=ConstantPropertiesUtil.ACCESS_KEY_SECRET;
+        try {
+            DefaultAcsClient client = VodUtil.initVodClient(accessKeyId, accessKeySecret);
+            DeleteVideoRequest request = new DeleteVideoRequest();
+            request.setVideoIds(videoId);
+            client.getAcsResponse(request);
+        }catch (ClientException e){
+            e.printStackTrace();
+        }
+
+    }
+
+    @Override
+    public void removeVideoList(List<String> videoList) {
+        String accessKeyId= ConstantPropertiesUtil.ACCESS_KEY_ID;
+        String accessKeySecret=ConstantPropertiesUtil.ACCESS_KEY_SECRET;
+        try {
+            DefaultAcsClient client = VodUtil.initVodClient(accessKeyId, accessKeySecret);
+            DeleteVideoRequest request = new DeleteVideoRequest();
+            String join = StringUtils.join(videoList, ",");
+            request.setVideoIds(join);
+            client.getAcsResponse(request);
+        }catch (ClientException e){
+            e.printStackTrace();
+        }
     }
 }
