@@ -19,11 +19,11 @@ public class Swagger2Config {
     public Docket webApiConfig(){
 
         return new Docket(DocumentationType.SWAGGER_2)
-                .groupName("webApi")
+                .groupName("AllApi")
                 .apiInfo(webApiInfo())
                 .select()
                 //只显示api路径下的页面
-                .paths(Predicates.and(PathSelectors.regex("/api/.*")))
+                .paths(Predicates.and(PathSelectors.regex("/.*")))
                 .build();
 
     }

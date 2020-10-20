@@ -2,7 +2,7 @@
   "name": "guli",
   "version": "1.0.0",
   "description": "谷粒学院前台网站",
-  "author": "Helen <55317332@qq.com>",
+  "author": "Lixuan <1255470835@qq.com>",
   "private": true,
   "scripts": {
     "dev": "nuxt",
@@ -13,9 +13,16 @@
     "precommit": "npm run lint"
   },
   "dependencies": {
-    "nuxt": "^2.0.0"
+    "axios": "^0.20.0",
+    "element-ui": "^2.13.2",
+    "js-cookie": "^2.2.1",
+    "nuxt": "^2.0.0",
+    "swiper": "^6.3.2",
+    "vue-awesome-swiper": "^4.1.1",
+    "vue-qriously": "^1.1.1"
   },
   "devDependencies": {
+    "@nuxt/types": "^2.14.6",
     "babel-eslint": "^10.0.1",
     "eslint": "^4.19.1",
     "eslint-friendly-formatter": "^4.0.1",

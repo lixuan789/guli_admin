@@ -6,9 +6,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.lixuan.service.edu.client.OssClient;
 import com.lixuan.service.edu.entity.Course;
 import com.lixuan.service.edu.entity.CourseDescription;
-import com.lixuan.service.edu.entity.vo.CourseInfoVo;
-import com.lixuan.service.edu.entity.vo.CoursePublishVo;
-import com.lixuan.service.edu.entity.vo.CourseQeryVo;
+import com.lixuan.service.edu.entity.vo.*;
 import com.lixuan.service.edu.mapper.ChapterMapper;
 import com.lixuan.service.edu.mapper.CourseDescriptionMapper;
 import com.lixuan.service.edu.mapper.CourseMapper;
@@ -21,6 +19,10 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -44,6 +46,9 @@ public class CourseServiceImpl extends ServiceImpl<CourseMapper, Course> impleme
 
     @Autowired
     private OssClient ossClient;
+
+    @Autowired
+    private CourseMapper courseMapper;
 
     /**
      * 添加课程的基本信息
@@ -142,5 +147,73 @@ public class CourseServiceImpl extends ServiceImpl<CourseMapper, Course> impleme
         ossClient.deleteOssFile(filename);
 
         baseMapper.deleteById(courseId);//删除课程
+    }
+
+    @Override
+    public List<Course> selectByTeacherId(String id) {
+        QueryWrapper<Course> query = Wrappers.<Course>query();
+        query.eq("teacher_id",id);
+        //按照最后更新时间倒序排列
+        query.orderByDesc("gmt_modified");
+        List<Course> courseList = baseMapper.selectList(query);
+        return courseList;
+    }
+
+    @Override
+    public Map<String, Object> selectPageFront(Page<Course> coursePage, CourseFrontQeryVo courseFrontQeryVo) {
+        QueryWrapper<Course> query = Wrappers.<Course>query();
+        if (!StringUtils.isEmpty(courseFrontQeryVo.getSubjectParentId())) {
+            query.eq("subject_parent_id", courseFrontQeryVo.getSubjectParentId());
+        }
+
+        if (!StringUtils.isEmpty(courseFrontQeryVo.getSubjectId())) {
+            query.eq("subject_id", courseFrontQeryVo.getSubjectId());
+        }
+
+        if (!StringUtils.isEmpty(courseFrontQeryVo.getBuyCountSort())) {
+            query.orderByDesc("buy_count");
+        }
+
+        if (!StringUtils.isEmpty(courseFrontQeryVo.getGmtCreateSort())) {
+            query.orderByDesc("gmt_create");
+        }
+
+        if (!StringUtils.isEmpty(courseFrontQeryVo.getPriceSort())) {
+            query.orderByDesc("price");
+        }
+
+        baseMapper.selectPage(coursePage, query);
+
+        List<Course> records = coursePage.getRecords();
+        long current = coursePage.getCurrent();
+        long pages = coursePage.getPages();
+        long size = coursePage.getSize();
+        long total = coursePage.getTotal();
+        boolean hasNext = coursePage.hasNext();
+        boolean hasPrevious = coursePage.hasPrevious();
+
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put("items", records);
+        map.put("current", current);
+        map.put("pages", pages);
+        map.put("size", size);
+        map.put("total", total);
+        map.put("hasNext", hasNext);
+        map.put("hasPrevious", hasPrevious);
+
+        return map;
+    }
+
+    @Override
+    public CourseWebVo selectInfoWebById(String courseId) {
+        this.updatePageViewCount(courseId);
+        return courseMapper.selectInfoWebById(courseId);
+    }
+
+    @Override
+    public void updatePageViewCount(String id) {
+        Course course = baseMapper.selectById(id);
+        course.setViewCount(course.getViewCount()+1);
+        baseMapper.updateById(course);
     }
 }
